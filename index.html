@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raj Indra Group | BGV Portal</title>
+    <title>Raj Indra Group | Management Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .fade-in { animation: fadeIn 0.5s ease-in; }
+        .fade-in { animation: fadeIn 0.4s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .tab-active { background: #2563eb !important; color: white !important; border-left: 4px solid #fff; }
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); }
     </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-900">
@@ -21,132 +22,164 @@
         let user = null;
     </script>
 
-    <!-- 1. LOGIN & REGISTER (Animated) -->
+    <!-- 1. AUTH SCREEN -->
     <div id="auth-screen" class="min-h-screen flex items-center justify-center bg-[#0f172a] p-4">
         <div class="glass p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md fade-in">
             <img src="" class="logo-img h-16 mx-auto mb-6">
             <h1 class="text-2xl font-bold text-center mb-8">Raj Indra Group</h1>
 
-            <!-- Login Form -->
-            <div id="login-form">
-                <div class="space-y-4">
-                    <div class="relative">
-                        <i class="fa fa-user absolute left-4 top-4 text-slate-400"></i>
-                        <input type="text" id="l-user" placeholder="Username" class="w-full pl-12 p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div class="relative">
-                        <i class="fa fa-lock absolute left-4 top-4 text-slate-400"></i>
-                        <input type="password" id="l-pass" placeholder="Password" class="w-full pl-12 pr-12 p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
-                        <button onclick="togglePass('l-pass')" class="absolute right-4 top-4 text-slate-400"><i class="fa fa-eye"></i></button>
-                    </div>
-                    <button onclick="login()" id="login-btn" class="w-full bg-[#0f172a] text-white p-4 rounded-2xl font-bold shadow-lg hover:scale-[1.02] transition">Sign In</button>
-                    <p class="text-center text-sm mt-6">New Associate? <button onclick="toggleAuth()" class="text-blue-600 font-bold">Register Profile</button></p>
+            <div id="login-form" class="space-y-4">
+                <div class="relative">
+                    <i class="fa fa-user absolute left-4 top-4 text-slate-400"></i>
+                    <input type="text" id="l-user" placeholder="Username" class="w-full pl-12 p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
+                <div class="relative">
+                    <i class="fa fa-lock absolute left-4 top-4 text-slate-400"></i>
+                    <input type="password" id="l-pass" placeholder="Password" class="w-full pl-12 pr-12 p-4 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500">
+                    <button onclick="togglePass('l-pass')" class="absolute right-4 top-4 text-slate-400"><i class="fa fa-eye"></i></button>
+                </div>
+                <button onclick="login()" id="login-btn" class="w-full bg-[#0f172a] text-white p-4 rounded-2xl font-bold shadow-lg hover:scale-[1.02] transition">Sign In</button>
+                <p class="text-center text-sm mt-6">New Associate? <button onclick="toggleAuth()" class="text-blue-600 font-bold underline">Register Profile</button></p>
             </div>
 
-            <!-- Register Form -->
-            <div id="reg-form" class="hidden">
-                <div class="space-y-3">
-                    <input type="text" id="r-name" placeholder="Full Name" class="w-full p-3 bg-slate-100 rounded-xl">
-                    <input type="email" id="r-email" placeholder="Email Address" class="w-full p-3 bg-slate-100 rounded-xl">
-                    <input type="text" id="r-phone" placeholder="Phone Number" class="w-full p-3 bg-slate-100 rounded-xl">
-                    <textarea id="r-addr" placeholder="Full Address" class="w-full p-3 bg-slate-100 rounded-xl"></textarea>
-                    <input type="text" id="r-photo" placeholder="Photo URL (Optional)" class="w-full p-3 bg-slate-100 rounded-xl">
-                    <button onclick="register()" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold">Submit Application</button>
-                    <button onclick="toggleAuth()" class="w-full text-slate-500 text-sm">Back to Login</button>
-                </div>
+            <div id="reg-form" class="hidden space-y-3">
+                <input type="text" id="r-name" placeholder="Full Name" class="w-full p-3 bg-slate-100 rounded-xl outline-none">
+                <input type="email" id="r-email" placeholder="Email Address" class="w-full p-3 bg-slate-100 rounded-xl outline-none">
+                <input type="text" id="r-phone" placeholder="Phone Number" class="w-full p-3 bg-slate-100 rounded-xl outline-none">
+                <textarea id="r-addr" placeholder="Address" class="w-full p-3 bg-slate-100 rounded-xl outline-none h-20"></textarea>
+                <button onclick="register()" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold">Submit Application</button>
+                <button onclick="toggleAuth()" class="w-full text-slate-500 text-sm font-bold">Back to Login</button>
             </div>
         </div>
     </div>
 
-    <!-- 2. MAIN DASHBOARD -->
+    <!-- 2. MAIN PORTAL -->
     <div id="main-portal" class="hidden min-h-screen flex flex-col md:flex-row">
         <!-- Sidebar -->
-        <div class="w-full md:w-64 bg-[#0f172a] text-slate-300 p-6 flex flex-col shadow-xl">
+        <div class="w-full md:w-64 bg-[#0f172a] text-slate-300 p-6 flex flex-col shadow-xl sticky top-0 md:h-screen">
             <div class="flex items-center gap-3 mb-10">
                 <img src="" class="logo-img h-10 bg-white p-1 rounded-lg">
-                <span class="font-bold text-white text-lg">RI GROUP</span>
+                <span class="font-bold text-white text-lg tracking-tight">RI GROUP</span>
             </div>
             <nav class="flex-1 space-y-2" id="nav-links"></nav>
-            <button onclick="location.reload()" class="bg-red-500/10 text-red-500 p-4 rounded-2xl font-bold mt-10"><i class="fa fa-sign-out-alt mr-2"></i> Logout</button>
+            <button onclick="location.reload()" class="bg-red-500/10 text-red-500 p-4 rounded-2xl font-bold mt-10 hover:bg-red-500 hover:text-white transition"><i class="fa fa-sign-out-alt mr-2"></i> Logout</button>
         </div>
 
-        <!-- Content -->
+        <!-- Main Content Area -->
         <div class="flex-1 p-4 md:p-10 overflow-y-auto">
-            <div id="admin-panel" class="hidden fade-in">
-                <h2 class="text-2xl font-bold mb-8">Executive Dashboard</h2>
+            <div id="loading" class="hidden fixed top-0 left-0 w-full h-1 bg-blue-600 animate-pulse z-50"></div>
+
+            <!-- ADMIN SECTIONS -->
+            <div id="section-financials" class="hidden fade-in">
+                <h2 class="text-2xl font-bold mb-8">Executive Overview</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border-l-8 border-blue-600">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border-l-8 border-blue-600">
                         <p class="text-xs font-bold text-slate-400 uppercase">Total Revenue</p>
                         <p class="text-3xl font-bold">₹<span id="a-rev">0</span></p>
                     </div>
-                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border-l-8 border-orange-500">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border-l-8 border-orange-500">
                         <p class="text-xs font-bold text-slate-400 uppercase">Payouts</p>
                         <p class="text-3xl font-bold">₹<span id="a-pay">0</span></p>
                     </div>
-                    <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border-l-8 border-green-500">
+                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border-l-8 border-green-500">
                         <p class="text-xs font-bold text-slate-400 uppercase">Net Profit</p>
                         <p class="text-3xl font-bold text-green-600">₹<span id="a-prof">0</span></p>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-white p-6 rounded-3xl shadow-sm">
-                        <h3 class="font-bold mb-4">Pending Approvals</h3>
-                        <div id="pending-list" class="space-y-3"></div>
-                    </div>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm text-center">
-                        <h3 class="font-bold mb-4">Case Manager</h3>
-                        <button onclick="openCaseModal()" class="bg-blue-600 text-white px-6 py-2 rounded-xl">+ Assign New Lead</button>
+            </div>
+
+            <!-- Approval Section (For Admin Only) -->
+            <div id="section-approvals" class="hidden fade-in">
+                <h2 class="text-2xl font-bold mb-6">Associate Approvals</h2>
+                <div class="bg-white rounded-3xl p-6 shadow-sm">
+                    <div id="pending-list" class="space-y-4">
+                        <p class="text-gray-400 italic">No pending profile requests.</p>
                     </div>
                 </div>
             </div>
 
-            <div id="emp-panel" class="hidden fade-in">
-                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border-b-8 border-blue-600 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div id="section-cases" class="hidden fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Assignments</h2>
+                    <button onclick="openModal('case-modal')" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold">+ New Lead</button>
+                </div>
+                <div class="bg-white rounded-3xl overflow-x-auto shadow-sm">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50">
+                            <tr class="text-xs uppercase font-bold text-slate-400">
+                                <th class="p-4">Case ID</th><th class="p-4">Client</th><th class="p-4">Associate</th><th class="p-4">Payout</th><th class="p-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="case-table-body" class="text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="section-associates" class="hidden fade-in">
+                <h2 class="text-2xl font-bold mb-6">Associate Network</h2>
+                <div id="user-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+            </div>
+
+            <!-- EMPLOYEE SECTIONS -->
+            <div id="section-home" class="hidden fade-in">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border-b-8 border-blue-600 mb-8 flex justify-between items-center">
                     <div class="flex items-center gap-4">
-                        <img id="e-avatar" src="" class="h-20 w-20 rounded-full border-4 border-slate-100 object-cover">
+                        <img id="e-avatar" src="" class="h-16 w-16 rounded-full border-4 border-slate-100 object-cover">
                         <div>
                             <h2 class="text-2xl font-bold" id="e-name"></h2>
-                            <p class="text-slate-400 text-sm">Official Associate Member</p>
+                            <p class="text-slate-400 text-sm">Associate Field Investigator</p>
                         </div>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="downloadID()" class="bg-[#0f172a] text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg">Download ID Card</button>
-                        <button onclick="openSettings()" class="bg-slate-100 text-slate-700 px-4 py-2 rounded-xl text-sm font-bold">Edit Profile</button>
-                    </div>
+                    <button onclick="downloadID()" class="bg-[#0f172a] text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg">Download ID Card</button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-3xl shadow-sm">
-                        <h3 class="font-bold mb-4">My Earning Tracker</h3>
+                    <div class="bg-white p-8 rounded-3xl shadow-sm">
+                        <p class="text-gray-400 font-bold uppercase text-xs">Total Earnings</p>
                         <p class="text-4xl font-bold text-blue-600">₹<span id="e-pay">0</span></p>
-                    </div>
-                    <div class="bg-white p-6 rounded-3xl shadow-sm">
-                        <h3 class="font-bold mb-4">Submit Assignment</h3>
-                        <div class="space-y-2">
-                            <input type="text" id="c-client" placeholder="Client Name" class="w-full p-2 border rounded-xl">
-                            <button onclick="submitLead()" class="w-full bg-blue-600 text-white p-2 rounded-xl">Add Lead</button>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODALS & TEMPLATES -->
-    <div id="id-card" class="hidden w-[350px] bg-white border-2 border-slate-900 rounded-[2rem] overflow-hidden text-center absolute top-[-9999px]">
-        <div class="bg-[#0f172a] p-6">
-            <img src="" class="logo-img h-12 mx-auto bg-white p-1 rounded">
-            <h3 class="text-white mt-2 font-bold tracking-tighter text-xl">RAJ INDRA GROUP</h3>
-        </div>
-        <div class="p-6">
-            <img id="id-photo" src="" class="h-24 w-24 rounded-full mx-auto border-4 border-slate-100 object-cover mb-4">
-            <h2 id="id-name" class="font-bold text-xl"></h2>
-            <p class="text-blue-600 text-xs font-bold uppercase mb-4 tracking-widest">Field Investigator</p>
-            <div class="text-left bg-slate-50 p-4 rounded-xl text-[10px] space-y-1">
-                <p><b>ID:</b> <span id="id-val"></span></p>
-                <p><b>CONTACT:</b> <span id="id-phone"></span></p>
+    <!-- MODAL: ADD CASE -->
+    <div id="case-modal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-[100]">
+        <div class="bg-white p-8 rounded-[2rem] w-full max-w-md shadow-2xl fade-in">
+            <h2 class="text-xl font-bold mb-6">Assign New Assignment</h2>
+            <div class="space-y-4">
+                <input type="text" id="m-client" placeholder="Client Name" class="w-full p-3 border rounded-xl bg-slate-50">
+                <div class="flex gap-2">
+                    <input type="number" id="m-charge" placeholder="Client Charge (₹)" class="w-1/2 p-3 border rounded-xl bg-slate-50">
+                    <input type="number" id="m-payout" placeholder="Emp Payout (₹)" class="w-1/2 p-3 border rounded-xl bg-slate-50">
+                </div>
+                <select id="m-emp" class="w-full p-3 border rounded-xl bg-slate-50 text-sm">
+                    <option value="">-- Assign Associate --</option>
+                </select>
+                <div class="flex gap-2 mt-4">
+                    <button onclick="addCase()" class="flex-1 bg-blue-600 text-white p-3 rounded-xl font-bold shadow-lg">Confirm</button>
+                    <button onclick="closeModal('case-modal')" class="flex-1 bg-slate-200 p-3 rounded-xl font-bold">Cancel</button>
+                </div>
             </div>
-            <div class="mt-6 border-t pt-2 text-[8px] text-slate-400">Digitally Verified Document</div>
+        </div>
+    </div>
+
+    <!-- ID CARD TEMPLATE (Hidden) -->
+    <div id="id-card" class="hidden w-[350px] bg-white border-2 border-slate-900 rounded-[2.5rem] overflow-hidden text-center absolute top-[-9999px]">
+        <div class="bg-[#0f172a] p-8">
+            <img src="" class="logo-img h-12 mx-auto bg-white p-1 rounded-lg">
+            <h3 class="text-white mt-4 font-bold text-xl tracking-tighter">RAJ INDRA GROUP</h3>
+            <p class="text-red-500 text-[8px] font-bold uppercase tracking-widest mt-1">Official Identity Card</p>
+        </div>
+        <div class="p-8">
+            <img id="id-photo" src="" class="h-28 w-28 rounded-full mx-auto border-4 border-slate-100 object-cover mb-4">
+            <h2 id="id-name" class="font-bold text-xl"></h2>
+            <p class="text-blue-600 text-xs font-bold uppercase mb-6 tracking-widest">Field Investigator</p>
+            <div class="text-left bg-slate-50 p-4 rounded-2xl text-[10px] space-y-1 border">
+                <p><b>EMP ID:</b> <span id="id-val"></span></p>
+                <p><b>CONTACT:</b> <span id="id-phone"></span></p>
+                <p><b>OFFICE:</b> RAJ INDRA GROUP, IND</p>
+            </div>
+            <div class="mt-8 pt-2 text-[8px] text-slate-400">Digitally Authenticated Document</div>
         </div>
     </div>
 
@@ -163,9 +196,15 @@
             document.getElementById('reg-form').classList.toggle('hidden');
         }
 
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
         async function api(data) {
+            document.getElementById('loading').classList.remove('hidden');
             const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(data) });
-            return await res.json();
+            const json = await res.json();
+            document.getElementById('loading').classList.add('hidden');
+            return json;
         }
 
         async function login() {
@@ -174,9 +213,12 @@
             const res = await api({action:'login', username:document.getElementById('l-user').value, password:document.getElementById('l-pass').value});
             if(res.success) {
                 user = res.user;
-                if(user.status !== 'Approved' && user.role !== 'admin') { alert("Account Pending Approval!"); btn.innerText = "Sign In"; return; }
+                if(user.status !== 'Approved' && user.role !== 'admin') {
+                    alert("Account Not Approved Yet! Wait for Admin.");
+                    btn.innerText = "Sign In"; return;
+                }
                 initPortal();
-            } else { alert(res.msg); btn.innerText = "Sign In"; }
+            } else { alert("Invalid Credentials"); btn.innerText = "Sign In"; }
         }
 
         async function register() {
@@ -185,8 +227,7 @@
                 name:document.getElementById('r-name').value,
                 email:document.getElementById('r-email').value,
                 phone:document.getElementById('r-phone').value,
-                address:document.getElementById('r-addr').value,
-                photo:document.getElementById('r-photo').value
+                address:document.getElementById('r-addr').value
             });
             alert(res.msg); toggleAuth();
         }
@@ -195,52 +236,10 @@
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('main-portal').classList.remove('hidden');
             const nav = document.getElementById('nav-links');
+            
             if(user.role === 'admin') {
-                document.getElementById('admin-panel').classList.remove('hidden');
-                nav.innerHTML = `<button class="w-full text-left p-4 rounded-2xl bg-blue-600 text-white font-bold shadow-lg">📊 Financials</button>
-                                 <button class="w-full text-left p-4 rounded-2xl hover:bg-slate-800">📋 Cases</button>
-                                 <button class="w-full text-left p-4 rounded-2xl hover:bg-slate-800">👥 Associates</button>
-                                 <button class="w-full text-left p-4 rounded-2xl hover:bg-slate-800">⚙️ Settings</button>`;
-                loadAdminData();
-            } else {
-                document.getElementById('emp-panel').classList.remove('hidden');
-                document.getElementById('e-name').innerText = user.name;
-                document.getElementById('e-avatar').src = user.photo || "https://via.placeholder.com/150";
-                nav.innerHTML = `<button class="w-full text-left p-4 rounded-2xl bg-blue-600 text-white font-bold shadow-lg">🏠 Home</button>
-                                 <button class="w-full text-left p-4 rounded-2xl hover:bg-slate-800">📂 My Cases</button>
-                                 <button class="w-full text-left p-4 rounded-2xl hover:bg-slate-800">💵 Earnings</button>`;
-            }
-        }
-
-        async function loadAdminData() {
-            const res = await api({action: 'getAdminData'});
-            document.getElementById('a-rev').innerText = res.stats.rev.toLocaleString();
-            document.getElementById('a-pay').innerText = res.stats.pay.toLocaleString();
-            document.getElementById('a-prof').innerText = res.stats.prof.toLocaleString();
-            const list = document.getElementById('pending-list');
-            list.innerHTML = '';
-            res.users.filter(u => u.status === 'Pending').forEach(u => {
-                list.innerHTML += `<div class="p-4 bg-slate-50 border rounded-2xl flex justify-between items-center shadow-sm">
-                    <span class="font-bold text-sm">${u.name}</span>
-                    <button onclick="approveUser('${u.id}')" class="bg-blue-600 text-white px-3 py-1 rounded-xl text-xs font-bold">Approve</button>
-                </div>`;
-            });
-        }
-
-        async function approveUser(id) {
-            await api({action:'approveUser', id: id});
-            alert("Member Approved!"); loadAdminData();
-        }
-
-        function downloadID() {
-            document.getElementById('id-name').innerText = user.name;
-            document.getElementById('id-val').innerText = user.id;
-            document.getElementById('id-phone').innerText = user.phone;
-            document.getElementById('id-photo').src = user.photo || "https://via.placeholder.com/150";
-            const el = document.getElementById('id-card');
-            el.classList.remove('hidden');
-            html2pdf().from(el).set({margin:0, filename: `RI_ID_${user.id}.pdf`}).save().then(()=>el.classList.add('hidden'));
-        }
-    </script>
-</body>
-</html>
+                nav.innerHTML = `
+                    <button onclick="switchTab('financials')" id="btn-financials" class="w-full text-left p-4 rounded-2xl transition font-bold"><i class="fa fa-chart-line mr-3"></i> Financials</button>
+                    <button onclick="switchTab('approvals')" id="btn-approvals" class="w-full text-left p-4 rounded-2xl transition font-bold"><i class="fa fa-user-check mr-3"></i> Approvals</button>
+                    <button onclick="switchTab('cases')" id="btn-cases" class="w-full text-left p-4 rounded-2xl transition font-bold"><i class="fa fa-briefcase mr-3"></i> Cases</button>
+                    <button onclick="switchTab('associates')" id="btn-associates" class="w-full text-left p-4 rounded-2xl transition font-bold"><i class="fa fa-users mr-3"></i> Associates</button>
